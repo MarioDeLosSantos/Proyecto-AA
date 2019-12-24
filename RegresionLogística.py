@@ -250,6 +250,34 @@ def ComparacionAciertos(tecnicas,X,y,numEtiquetas,landa):
     #Devolvemos la lista
     return porcentajes  
 
+#Pinta una grafica mostrando el porcentaje para cada una de 
+#las tecnicas algoritmicas del minimize
+def pintaGraficaPorcentajes(tecnicas,porcentajes):
+    """
+    Dibuja una grafica de barras mostrando la precision para cada una
+    de las tecnicas algotitmicas disponibles para la funcion minimize de
+    scipy
+
+    Args:
+        tecnicas:Conjuntos de tecnicas disponible para la funcion de minimize de scipy(TNC,CG...etc)
+        porcentajes:Conjuntos de porcentajes para cada una de las tecnicas
+       
+    """
+    plt.rcdefaults()
+    fig, ax = plt.subplots()
+
+    # Example data
+    y_pos = np.arange(len(tecnicas))
+    error = np.random.rand(len(tecnicas))
+
+    ax.barh(y_pos, porcentajes, xerr=error, align='center')
+    ax.set_yticks(y_pos)
+    ax.set_yticklabels(tecnicas)
+    ax.invert_yaxis()  # labels read top-to-bottom
+    ax.set_title("Porcentaje de aciertos segun tecnica algoritmica utilizada")
+
+    #Dibujamos la grafica
+    plt.show()
 def main():
     return 0
 
