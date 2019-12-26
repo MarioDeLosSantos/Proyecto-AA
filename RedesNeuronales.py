@@ -120,13 +120,13 @@ def backprop(params_rn, num_entradas, num_ocultas, num_etiquetas, X, y, reg):
 
     # Por cada ejemplo
     for t in range(m):
-        a1t = a1[t, :] # (1, 90000)
-        a2t = a2[t, :] # (1, 26)
-        ht = h[t, :] # (1, 10)
+        a1t = a1[t, :] 
+        a2t = a2[t, :] 
+        ht = h[t, :] 
         yt = y[t]
 
         d3t = ht - yt
-        d2t = np.dot(theta2.T, d3t) * (a2t * (1 - a2t)) # (1, 26)
+        d2t = np.dot(theta2.T, d3t) * (a2t * (1 - a2t)) 
 
         delta1 = delta1 + np.dot(d2t[1:, np.newaxis], a1t[np.newaxis, :])
         delta2 = delta2 + np.dot(d3t[:, np.newaxis], a2t[np.newaxis, :])
@@ -165,7 +165,7 @@ def porcentajeTotal(h,y):
 
 def main():
     #Cargamos el dataset
-    data = loadmat("data.mat")
+    data = loadmat("data20x20.mat")
 
     #guardamos la matriz y en un solo vector 
     y = data["y"].ravel()
@@ -173,7 +173,7 @@ def main():
 
     #el numero de entradas son cada uno de los píxeles de la imagen de 300x300
     num_entradas = X.shape[1]
-    num_ocultas = 30
+    num_ocultas = 150
     num_etiquetas = 10
 
     # Transforma Y en una matriz de vectores, donde cada vector está formado por todo 
@@ -188,8 +188,8 @@ def main():
     
 
     # Inicialización de dos matrices de pesos de manera aleatoria
-    Theta1 = pesosAleatorios(90000, 30) # (25, 401)
-    Theta2 = pesosAleatorios(30, 10) # (10, 26)
+    Theta1 = pesosAleatorios(num_entradas, num_ocultas) # (25, 401)
+    Theta2 = pesosAleatorios(num_ocultas, num_etiquetas) # (10, 26)
 
     # Crea una lista de Thetas
     Thetas = [Theta1, Theta2]
@@ -202,7 +202,7 @@ def main():
     optTheta = opt.minimize(fun=backprop, x0=nn_params, 
             args=(num_entradas, num_ocultas, num_etiquetas,
             X, y_onehot, 1), method='TNC', jac=True,
-            options={'maxiter': 200})
+            options={'maxiter': 500})
 
     # Desglose de los pesos óptimos en dos matrices
     Theta1Final = np.reshape(optTheta.x[:num_ocultas * (num_entradas + 1)],
